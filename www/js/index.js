@@ -34,8 +34,10 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        app.loadBooks();
-		navigator.geolocation.getCurrentPosition(success, error, options)
+        //app.loadBooks();
+		
+		var btn = document.getElementById("pressMe");
+		btn.addEventListener("click", getLoc, false);
     },
     loadBooks: function() {
         var request = new  XMLHttpRequest();
@@ -66,6 +68,10 @@ var app = {
     }
 };
 
+function getLoc() {
+	navigator.geolocation.getCurrentPosition(success, error, options)
+}
+
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -75,16 +81,15 @@ var options = {
 function success(pos) {
   var crd = pos.coords;
 
-  console.log('Your current position is:');
   console.log('Latitude : ' + crd.latitude);
   console.log('Longitude: ' + crd.longitude);
-  console.log('More or less ' + crd.accuracy + ' meters.');
+  
+  document.getElementById("displayLoc").innerHTML += ('Latitude : ' + crd.latitude);
+  document.getElementById("displayLoc").innerHTML += ('Longitude: ' + crd.longitude);
 };
 
 function error(err) {
   console.warn('ERROR(' + err.code + '): ' + err.message);
 };
-
-navigator.geolocation.getCurrentPosition(success, error, options);
 
 app.initialize();
