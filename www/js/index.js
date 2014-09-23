@@ -73,23 +73,35 @@ function getLoc() {
 }
 
 var options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
+	enableHighAccuracy: true,
+	timeout: 5000,
+	maximumAge: 0
 };
 
-function success(pos) {
-  var crd = pos.coords;
+function success(position) {
+	var crd = position.coords;
 
-  console.log('Latitude : ' + crd.latitude);
-  console.log('Longitude: ' + crd.longitude);
+	console.log('Latitude : ' + crd.latitude);
+	console.log('Longitude: ' + crd.longitude);
   
-  document.getElementById("displayLoc").innerHTML += ('Latitude : ' + crd.latitude);
-  document.getElementById("displayLoc").innerHTML += ('Longitude: ' + crd.longitude);
+	document.getElementById("displayLoc").innerHTML += ('Latitude : ' + crd.latitude);
+	document.getElementById("displayLoc").innerHTML += ('Longitude: ' + crd.longitude);
+  
+	var myRequest = new  XMLHttpRequest();
+	myRequest.open("GET", "http://open.mapquestapi.com/geocoding/v1/reverse?key=Fmjtd|luur2hurn0%2Cbg%3Do5-9wasly&location=" +
+position.coords.latitude + "," + position.coords.longitude, true);
+	myRequest.onreadystatechage = function() {
+		if (myRequest.readyState === 4) {
+                if (myRequest.status === 200 || myRequest.state === 0) {
+                    console.log("response: " + myRequest.responseText);
+                }    
+            }
+	};
+	myRequest.send();
 };
 
 function error(err) {
-  console.warn('ERROR(' + err.code + '): ' + err.message);
+	console.warn('ERROR(' + err.code + '): ' + err.message);
 };
 
 app.initialize();
